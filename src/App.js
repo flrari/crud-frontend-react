@@ -1,23 +1,38 @@
-import logo from './logo.svg';
+import { useState, useEffect } from 'react';
 import './App.css';
+import CardList from './card-list/CardList';
 
 function App() {
+
+  const [employees, setEmployees] = useState([]);
+
+ useEffect( () => {
+
+  const fetchData = async () => {
+    const response = await fetch("http://localhost:8080/dipendenti/all", 
+    {
+      method: "GET",
+      mode: "no-cors",
+      headers: {
+        "Access-Control-Allow-Origin": "*",
+        "Content-Type": "application/json; charset=UTF-8" 
+      }
+    })
+    const data = await response.json()
+    console.log({data})
+    setEmployees({data})
+  }
+
+  fetchData()
+
+    
+  }, []);
+  //useState(employees);
+
   return (
     <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
+      <h1 className="app-title">Employees Management</h1>
+      <CardList employees={employees}/>
     </div>
   );
 }
